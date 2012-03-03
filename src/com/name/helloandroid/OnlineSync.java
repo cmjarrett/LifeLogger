@@ -16,6 +16,7 @@ public class OnlineSync extends Activity {
     
     private static final int REQUEST_UPLOAD_TO_SERVER = 1;
     private static final int REQUEST_DOWNLOAD_FROM_SERVER = 3;
+    private static final int GPS_COORDINATE_LENGTH = 18;
     private static final String EXTRA_RETURN_STRING = "return_string";
     private static GpsCoordinate[] coordinates;
     private static String GPS_FILENAME = "gps_coordinates";
@@ -37,15 +38,19 @@ public class OnlineSync extends Activity {
     	GpsCoordinate gp;
     	for(int i=0;i<40;i++)
     	{
-    			gp = new GpsCoordinate("0000000000",(i*130)/16,(i*330)/11);
+    			gp = new GpsCoordinate("000000000000" + i,(i*130)/16,(i*330)/11);
+    			
     			coordinates[i] = gp;
     	}
+    	
+    	
     	try{
     		FileOutputStream fos = openFileOutput(GPS_FILENAME, Context.MODE_PRIVATE);
     		for(GpsCoordinate gps : coordinates)
     		{
-    			fos.write(gps.toString().getBytes());
+    			fos.write(gps.toString().substring(0,GPS_COORDINATE_LENGTH).getBytes());
     		}
+    		fos.close();
     	}
     	catch(Exception e)
     	{
